@@ -1,0 +1,45 @@
+name: Debricked scan
+
+on: [push]
+
+jobs:
+  vulnerabilities-scan-production:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debricked/cli:latest-resolution-debian
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Fingerprint files
+        run: |
+          debricked fingerprint
+          
+      - name: Run Scan
+        run: |
+          debricked scan
+        env:
+          DEBRICKED_TOKEN: ${{ secrets.DEBRICKED_TOKEN }}
+
+  vulnerabilities-scan-staging:
+    runs-on: ubuntu-latest
+
+    container:
+      image: debricked/cli:latest-resolution-debian
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Fingerprint files
+        run: |
+          debricked fingerprint
+          
+      - name: Run Scan
+        run: |
+          debricked scan
+        env:
+          DEBRICKED_TOKEN: ${{ secrets.DEBRICKED_TOKEN }}
+
